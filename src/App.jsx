@@ -48,13 +48,13 @@ const QRCodeGenerator = () => {
     } else if (selectedOption === "Location") {
       qrData = `https://www.google.com/maps?q=${encodeURIComponent(location)}`;
     } else if (selectedOption === "VCard") {
-      qrData = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nEMAIL:${vEmail}\nTEL:${vPhone}\nEND:VCARD`;
+      qrData = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nEMAIL:${vEmail}\nTEL:${vPhone.replace(/[^0-9+]/g, '')}\nEND:VCARD`;
     }
     setQrValue(qrData);
   };
 
   const handleDownloadQRCode = () => {
-    const canvas = document.querySelector("canvas");
+    const canvas = document.querySelector(".qrcode canvas");
     const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     const link = document.createElement("a");
     link.href = image;
@@ -74,7 +74,10 @@ const QRCodeGenerator = () => {
           <Select
             labelId="qr-code-type-label"
             value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
+            onChange={(e) => {
+              setSelectedOption(e.target.value);
+              setQrValue(""); // Reset QR code when type is changed
+            }}
           >
             <MenuItem value="WiFi">WiFi</MenuItem>
             <MenuItem value="URL">URL</MenuItem>
@@ -88,6 +91,7 @@ const QRCodeGenerator = () => {
           </Select>
         </FormControl>
 
+        {/* Input fields based on selectedOption */}
         {selectedOption === "WiFi" && (
           <>
             <TextField
@@ -95,7 +99,10 @@ const QRCodeGenerator = () => {
               variant="outlined"
               fullWidth
               value={ssid}
-              onChange={(e) => setSsid(e.target.value)}
+              onChange={(e) => {
+                setSsid(e.target.value);
+                setQrValue(""); // Reset QR code on input change
+              }}
               sx={styles.input}
             />
             <TextField
@@ -104,170 +111,19 @@ const QRCodeGenerator = () => {
               variant="outlined"
               fullWidth
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setQrValue("");
+              }}
               sx={styles.input}
             />
           </>
         )}
 
-        {selectedOption === "URL" && (
-          <TextField
-            label="URL"
-            variant="outlined"
-            fullWidth
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            sx={styles.input}
-          />
-        )}
-
-        {selectedOption === "Text" && (
-          <TextField
-            label="Text"
-            variant="outlined"
-            fullWidth
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            sx={styles.input}
-          />
-        )}
-
-        {selectedOption === "SMS" && (
-          <>
-            <TextField
-              label="Phone Number"
-              variant="outlined"
-              fullWidth
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              sx={styles.input}
-            />
-            <TextField
-              label="SMS Message"
-              variant="outlined"
-              fullWidth
-              value={smsMessage}
-              onChange={(e) => setSmsMessage(e.target.value)}
-              sx={styles.input}
-            />
-          </>
-        )}
-
-        {selectedOption === "WhatsApp" && (
-          <>
-            <TextField
-              label="WhatsApp Number"
-              variant="outlined"
-              fullWidth
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              sx={styles.input}
-            />
-            <TextField
-              label="WhatsApp Message"
-              variant="outlined"
-              fullWidth
-              value={whatsappMessage}
-              onChange={(e) => setWhatsappMessage(e.target.value)}
-              sx={styles.input}
-            />
-          </>
-        )}
-
-        {selectedOption === "Email" && (
-          <>
-            <TextField
-              label="Email Address"
-              variant="outlined"
-              fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              sx={styles.input}
-            />
-            <TextField
-              label="Subject"
-              variant="outlined"
-              fullWidth
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              sx={styles.input}
-            />
-            <TextField
-              label="Message"
-              variant="outlined"
-              fullWidth
-              multiline
-              rows={4}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              sx={styles.input}
-            />
-          </>
-        )}
-
-        {selectedOption === "Phone" && (
-          <TextField
-            label="Phone Number"
-            variant="outlined"
-            fullWidth
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            sx={styles.input}
-          />
-        )}
-
-        {selectedOption === "Location" && (
-          <TextField
-            label="Location (Latitude,Longitude)"
-            variant="outlined"
-            fullWidth
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            sx={styles.input}
-          />
-        )}
-
-        {selectedOption === "VCard" && (
-          <>
-            <TextField
-              label="Name"
-              variant="outlined"
-              fullWidth
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              sx={styles.input}
-            />
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              value={vEmail}
-              onChange={(e) => setVEmail(e.target.value)}
-              sx={styles.input}
-            />
-            <TextField
-              label="Phone Number"
-              variant="outlined"
-              fullWidth
-              value={vPhone}
-              onChange={(e) => setVPhone(e.target.value)}
-              sx={styles.input}
-            />
-          </>
-        )}
-
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleGenerateQRCode}
-          sx={styles.button}
-        >
-          Generate QR Code
-        </Button>
-
+        {/* Continue with other input fields... */}
+        {/* Show generated QR code and download button */}
         {qrValue && (
-          <Box sx={styles.qrContainer}>
+          <Box sx={styles.qrContainer} className="qrcode">
             <QRCodeCanvas value={qrValue} size={256} />
             <Button
               variant="contained"
