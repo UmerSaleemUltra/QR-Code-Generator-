@@ -40,9 +40,13 @@ const QRCodeGenerator = () => {
     } else if (selectedOption === "SMS") {
       qrData = `sms:${phoneNumber}?body=${encodeURIComponent(smsMessage)}`;
     } else if (selectedOption === "WhatsApp") {
-      qrData = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      qrData = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+        whatsappMessage
+      )}`;
     } else if (selectedOption === "Email") {
-      qrData = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+      qrData = `mailto:${email}?subject=${encodeURIComponent(
+        subject
+      )}&body=${encodeURIComponent(message)}`;
     } else if (selectedOption === "Phone") {
       qrData = `tel:${phoneNumber}`;
     } else if (selectedOption === "Location") {
@@ -55,7 +59,9 @@ const QRCodeGenerator = () => {
 
   const handleDownloadQRCode = () => {
     const canvas = document.querySelector("canvas");
-    const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    const image = canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
     const link = document.createElement("a");
     link.href = image;
     link.download = "qrcode.png";
@@ -294,29 +300,30 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     minHeight: "100vh",
-    backgroundColor: "#f5f5f5",
-    padding: "20px",
+    backgroundColor: "#f0f0f0",
+    padding: "1rem",
   },
   formContainer: {
     backgroundColor: "#fff",
-    padding: "30px",
+    padding: "2rem",
     borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
     maxWidth: "600px",
     width: "100%",
   },
   input: {
-    marginBottom: "20px",
+    mb: 2,
   },
   button: {
-    marginBottom: "20px",
+    mt: 2,
+    mb: 4,
   },
   qrContainer: {
     textAlign: "center",
-    marginTop: "20px",
+    marginTop: "2rem",
   },
   downloadButton: {
-    marginTop: "20px",
+    mt: 2,
   },
 };
 
