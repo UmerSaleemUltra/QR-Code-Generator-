@@ -300,7 +300,6 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     minHeight: "100vh",
-    backgroundColor: "#f0f0f0",
     padding: "1rem",
   },
   formContainer: {
